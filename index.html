@@ -8,11 +8,24 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script async type='text/javascript' src='js/lib/knockout-3.2.0.js'></script>
-    <script async type='text/javascript' src="js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+    
 </head>
 <body>
-    <div class="header">
+	<div id="map-canvas" style="height: 1000px;" class="map"></div>
+    <div class="header top">
     	<h1>Neighborhood Map: Kansas City</h1>
     </div>
+    	<div class="sidebar top">
+    	
+			<div id="tfheader">
+				<form id="tfnewsearch" method="get" action="">
+	        	<input type="text" class="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="Search" class="tfbutton">
+				</form>
+			<div class="tfclear"></div>
+		
+    	</div>
+    </div>
+    <script type='text/javascript' src="js/main.js"></script>
 </body>
 </html>
