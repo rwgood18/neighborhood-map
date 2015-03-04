@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="img/kc.ico" type="image/x-icon" />
     <title>Neighborhood Map</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid Sans&effect=shadow-multiple">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script async type='text/javascript' src='js/lib/knockout-3.2.0.js'></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
     
 </head>
 <body>
-	<div id="map-canvas" style="height: 1000px;" class="map"></div>
-    <div class="header top">
-    	<h1>Neighborhood Map: Kansas City</h1>
+	<div id="map-canvas" class="map"></div>
+    <div class="header top ">
+    	<h1 class="font-effect-shadow-multiple">Neighborhood Map: Kansas City</h1>
     </div>
     	<div class="sidebar top">
     	
@@ -26,7 +26,7 @@
 			<div id="panorama"></div>
     	</div>
     </div>
-    <div id="pano" style="width: 45%; height: 500px; float: right; z-index: 20;"></div>
+    <div id="pano" class="pano"></div>
     <script type='text/javascript' src="js/main.js"></script>
 </body>
 </html>
