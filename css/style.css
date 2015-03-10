@@ -32,7 +32,7 @@ h1 {
 .sidebar {
 	float: left;
 	width: 20%;
-	height: 50vw;
+	height: 50vh;
 	min-width: 150px;
 	margin-left: 2em;
 }
