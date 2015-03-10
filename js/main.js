@@ -113,6 +113,11 @@ function ViewModel () {
           map: map,
           title: data.places[i].name
       });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        console.log(marker.getPosition());
+        yelpRequest();
+      });
     }
 
     var panoramaOptions = {
@@ -134,6 +139,13 @@ function ViewModel () {
   infoChanger = function () {
     document.getElementById('info').style.display = "block";
     document.getElementById('pano').style.display = "none";
+  }
+
+  yelpRequest = function () {
+    console.log('yelpRequest called');
+    $.get('http://api.yelp.com/v2/search?term=german+food&location=Hayes&cll=37.77493,-122.419415', function (response) {
+      console.log('response');
+    })
   }
 
   google.maps.event.addDomListener(window, 'load', initialize);
