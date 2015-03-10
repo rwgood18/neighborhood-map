@@ -66,6 +66,20 @@ var data = {
     Lng: -94.582127,
     apiInfo: ''
     },
+    {
+    name: 'Kansas City Public Library',
+    Lat: 39.116743,
+    Lng: -94.583466,
+    apiInfo: ''
+    },
+    {
+    name: 'Nelson-Atkins Museum of Art',
+    Lat: 39.045161,
+    Lng: -94.580914,
+    apiInfo: ''
+    },
+    
+
   ]
 };
 
@@ -84,11 +98,11 @@ function ViewModel () {
     self.places.push( new Place(info));
   })
 
-  function initialize() {
+  initialize = function () {
     var kc = new google.maps.LatLng(39.097279,-94.585722);
     var mapOptions = {
       center: kc,
-      zoom: 16
+      zoom: 15
     };
     var map = new google.maps.Map(
       document.getElementById('map-canvas'), mapOptions);
@@ -110,6 +124,16 @@ function ViewModel () {
     };
     var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
     map.setStreetView(panorama);
+  }
+
+  viewChanger = function () {
+    document.getElementById('pano').style.display = "block";
+    document.getElementById('info').style.display = "none";
+  }
+
+  infoChanger = function () {
+    document.getElementById('info').style.display = "block";
+    document.getElementById('pano').style.display = "none";
   }
 
   google.maps.event.addDomListener(window, 'load', initialize);
