@@ -78,8 +78,12 @@ var data = {
     Lng: -94.580914,
     apiInfo: ''
     },
-    
-
+    {
+    name: 'Uptown Theater',
+    Lat: 39.061349,
+    Lng: -94.590645,
+    apiInfo: ''
+    }
   ]
 };
 
@@ -92,10 +96,15 @@ var Place = function (info) {
 function ViewModel () {
   var self = this;
 
-  this.places = ko.observableArray([]);
+  self.places = ko.observableArray([]);
+  self.names = ko.observableArray([]);
 
   data.places.forEach(function(info) {
     self.places.push( new Place(info));
+  })
+
+  data.places.forEach(function(info) {
+    self.names.push( info.name);
   })
 
   initialize = function () {
@@ -132,27 +141,35 @@ function ViewModel () {
   }
 
   viewChanger = function () {
-    document.getElementById('pano').style.display = "block";
-    document.getElementById('info').style.display = "none";
+    $('#pano').css('display', 'block');
+    $('#info').css('display', 'none');
   }
 
   infoChanger = function () {
-    document.getElementById('info').style.display = "block";
-    document.getElementById('pano').style.display = "none";
+    $('#info').css('display', 'block');
+    $('#pano').css('display', 'none');
   }
 
-  $.getJSON('https://api.foursquare.com/v2/venues/explore?ll=39.097279,-94.585722&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
-    console.log(response);
+  $(function() {
+    $( "#search" ).autocomplete({
+      //appendTo: ".place-list",
+      source: self.names(),
+      response: function( event, ui ) {
+        console.log("serach bar thing function thing bla bla bla");
+      }
+    });
   })
 
-/*
-  yelpRequest = function () {
-    console.log('yelpRequest called');
-    $.get('http://api.yelp.com/v2/search?term=german+food&location=Hayes&cll=37.77493,-122.419415', function (response) {
-      console.log('response');
-    })
-  }
-*/
+  /*
+  $.getJSON('https://api.foursquare.com/v2/venues/4fe9d9bea17c0739a860b879/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
+    $('#info').attr('src', response.response.photos.items[0].prefix.slice(0,-1) + response.response.photos.items[0].suffix);
+    console.log(response.response.photos.items[0].prefix.slice(0,-1) + response.response.photos.items[0].suffix);
+  })
+  */
+
   google.maps.event.addDomListener(window, 'load', initialize);
 }
 ko.applyBindings(new ViewModel());
+
+
+//&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305'

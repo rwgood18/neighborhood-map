@@ -12,6 +12,7 @@ h1 {
 	position: relative;
 	z-index: 10;
 }
+
 .map {
 	position:fixed;
     top: 0;
