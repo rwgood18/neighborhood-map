@@ -4,85 +4,85 @@ var data = {
     name: 'Kauffman Center for the Performing Arts',
     Lat: 39.094114,
     Lng: -94.587513,
-    apiInfo: ''
+    id: '4bc4e070abf4952177b4c593'
     },
     {
     name: 'Sprint Center',
     Lat: 39.098403,
     Lng: -94.580485,
-    apiInfo: ''
+    id: '4abb8024f964a520df8320e3'
     },
     {
     name: 'KC Live!',
     Lat: 39.098036,
     Lng: -94.581644,
-    apiInfo: ''
+    id: '4c34bf94a0ced13a83b0186e'
     },
     {
     name: 'Bartle Hall',
     Lat: 39.098611,
     Lng: -94.587105,
-    apiInfo: ''
+    id: '4c03d3c6f56c2d7fb1591d66'
     },
     {
     name: 'Folly Theater',
     Lat: 39.100426,
     Lng: -94.587212,
-    apiInfo: ''
+    id: '4ad4c01ff964a520eff120e3'
     },
     {
     name: 'Municipal Auditorium',
     Lat: 39.098095,
     Lng: -94.586407,
-    apiInfo: ''
+    id: '4ad4c01ff964a520f2f120e3'
     },
     {
     name: 'The Midland',
     Lat: 39.099069,
     Lng: -94.583704,
-    apiInfo: ''
+    apiInfo: '4ad4c01ff964a520eef120e3'
     },
     {
     name: 'Kansas City Marriott',
     Lat: 39.101159,
     Lng: -94.58628,
-    apiInfo: ''
+    id: '4ada400af964a520872021e3'
     },
     {
     name: 'National World War I Museum at Liberty Memorial',
     Lat: 39.08134,
     Lng: -94.585937,
-    apiInfo: ''
+    id: '4f9c0ba5e4b04dd7353a754d'
     },
     {
     name: 'Union Station',
     Lat: 39.085396,
     Lng: -94.585474,
-    apiInfo: ''
+    id: '4f885099e4b0cec3aa2c928a'
     },
     {
     name: 'Crown Center',
     Lat: 39.083314,
     Lng: -94.582127,
-    apiInfo: ''
+    id: '4ad4c01ff964a520fff120e3'
     },
     {
     name: 'Kansas City Public Library',
     Lat: 39.116743,
     Lng: -94.583466,
-    apiInfo: ''
+    id: '4b13eb34f964a5207a9a23e3'
     },
     {
     name: 'Nelson-Atkins Museum of Art',
     Lat: 39.045161,
     Lng: -94.580914,
-    apiInfo: ''
+    id: '4ad4c01ef964a520aff120e3'
     },
     {
     name: 'Uptown Theater',
     Lat: 39.061349,
     Lng: -94.590645,
-    apiInfo: ''
+    id: '4ad4c01ff964a520f1f120e3'
     }
   ]
 };
@@ -97,15 +97,19 @@ function ViewModel () {
   var self = this;
 
   self.places = ko.observableArray([]);
+  self.buffer = ko.observableArray([]);
   self.names = ko.observableArray([]);
 
   data.places.forEach(function(info) {
     self.places.push( new Place(info));
+    self.buffer.push( new Place(info));
   })
 
   data.places.forEach(function(info) {
     self.names.push( info.name);
   })
+
+  this.searchString = ko.observable("Search for a Place");
 
   initialize = function () {
     var kc = new google.maps.LatLng(39.097279,-94.585722);
@@ -124,8 +128,7 @@ function ViewModel () {
       });
 
       google.maps.event.addListener(marker, 'click', function() {
-        console.log(marker.getPosition());
-        yelpRequest();
+        getFoursquare();
       });
     }
 
@@ -150,26 +153,45 @@ function ViewModel () {
     $('#pano').css('display', 'none');
   }
 
+  clearText = function () {
+    this.searchString("");
+  }
+  
   $(function() {
     $( "#search" ).autocomplete({
-      //appendTo: ".place-list",
+      appendTo: ".place-list",
       source: self.names(),
       response: function( event, ui ) {
-        console.log("serach bar thing function thing bla bla bla");
+      },
+      select: function (event, ui) {
+        getFoursquare();
       }
-    });
+    });   
   })
+ 
+  getFoursquare = function () {
+    infoChanger();
+    console.log("getFoursquare called");
+    $.getJSON('https://api.foursquare.com/v2/venues/4fe9d9bea17c0739a860b879/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
+      $('#img0').attr('src', response.response.photos.items[0].prefix + "200x200" + response.response.photos.items[0].suffix);
+      $('#img1').attr('src', response.response.photos.items[1].prefix + "200x200" + response.response.photos.items[1].suffix);
+      $('#img2').attr('src', response.response.photos.items[2].prefix + "200x200" + response.response.photos.items[2].suffix);
+      //console.log(response.response.photos.items[0].prefix + "200x200" + response.response.photos.items[0].suffix);
+    })
 
-  /*
-  $.getJSON('https://api.foursquare.com/v2/venues/4fe9d9bea17c0739a860b879/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
-    $('#info').attr('src', response.response.photos.items[0].prefix.slice(0,-1) + response.response.photos.items[0].suffix);
-    console.log(response.response.photos.items[0].prefix.slice(0,-1) + response.response.photos.items[0].suffix);
-  })
-  */
+    $.getJSON('https://api.foursquare.com/v2/venues/4fe9d9bea17c0739a860b879/tips?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
+      console.log(response);
+      $('#p0').text(response.response.tips.items[0].text);
+      $('#p1').text(response.response.tips.items[1].text);
+      $('#p2').text(response.response.tips.items[2].text);
+      $('#p3').text(response.response.tips.items[3].text);
+      $('#p4').text(response.response.tips.items[4].text);
+    })
+  }
 
   google.maps.event.addDomListener(window, 'load', initialize);
 }
-ko.applyBindings(new ViewModel());
 
+ko.applyBindings(new ViewModel());
 
 //&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305'

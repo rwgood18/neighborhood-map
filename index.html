@@ -23,11 +23,11 @@
     	
 			<div id="tfheader">
 				<form id="tfnewsearch" method="get" action="">
-	        	  <input type="text" id="search" class="tftextinput" size="21" maxlength="120"><input type="submit" value="Search" class="tfbutton">
+	        	  <input type="text" id="search" class="tftextinput" size="21" data-bind="textInput: searchString, click: clearText, event: { keyup: autoComplete }"><input type="submit" value="Search" class="tfbutton">
 				</form>
                 <div class="ui-widget"></div>
                 <div class="place-list-div">
-                    <ul class="place-list" data-bind="foreach: places">
+                    <ul class="place-list" data-bind="foreach: buffer">
                         <li class="place" data-bind="text: name"></li>
                     </ul>
                 </div>
@@ -38,7 +38,19 @@
         <button class="view" onclick="viewChanger()">Street View</button>
         <button class="view" onclick="infoChanger()">Info</button>
         <div id="pano" class="pano"></div>
-        <img id="info" src=""></img>
+        <div id="info" src="">
+            <img id="img0" class="image" src="">
+            <img id="img1" class="image" src="">
+            <img id="img2" class="image" src="">
+            <div class="tips">
+                <h2>Tips</h2>
+                <p id="p0"></p>
+                <p id="p1"></p>
+                <p id="p2"></p>
+                <p id="p3"></p>
+                <p id="p4"></p>
+            </div>
+        </div>
     </div>
     <script type='text/javascript' src="js/main.js"></script>
 </body>
