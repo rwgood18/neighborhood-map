@@ -111,16 +111,16 @@ function ViewModel () {
   })
 
   this.searchString = ko.observable("Search for a Place");
-
+  var pLen = data.places.length;
   initialize = function () {
-    var kc = new google.maps.LatLng(39.097279,-94.585722);
+    var kc = new google.maps.LatLng(39.097279,-94.595722);
     var mapOptions = {
       center: kc,
       zoom: 15
     };
     var map = new google.maps.Map(
       document.getElementById('map-canvas'), mapOptions);
-    var pLen = data.places.length;
+    
     for (i = 0; i < pLen; i++) {
       var marker = new google.maps.Marker({
           position: new google.maps.LatLng(data.places[i].Lat, data.places[i].Lng),
@@ -167,10 +167,25 @@ function ViewModel () {
       response: function( event, ui ) {
       },
       select: function (event, ui) {
-        getFoursquare();
+        var x = window.setTimeout(function(){
+          search();
+        }, 10);
       }
-    });   
+    });
   })
+
+  search = function () {
+    var term = $('#search').val();
+    for (var i=0; i<pLen; i++) {
+      if (data.places[i].name == term) {
+        getFoursquare(data.places[i]);
+      }
+    }
+  }
+
+  preGetFoursquare = function () {
+    getFoursquare(this);
+  }
  
   getFoursquare = function (place) {
     infoChanger();
