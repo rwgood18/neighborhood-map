@@ -1,3 +1,14 @@
+@media (max-width: 460px) {
+  .sidebar {
+    margin-left: 5px;
+    height: 400px;
+  }
+  .tfbutton {
+  	padding: 5px 5px;
+  }
+}
+
+
 body {
 	font-family: 'Droid Sans';
 	font-size: 12px;
@@ -25,8 +36,8 @@ h1 {
 }
 
 .place-list-div {
-	height: 200px;
-	width: 500px;
+	height: 33%;
+	width: 90%;
 	margin: 10px auto 0px auto;
 	line-height: 2;
 	overflow-y: scroll;
@@ -54,9 +65,9 @@ h1 {
 .sidebar {
 	background-color:#c3dfef;
 	float: left;
-	width: 560px;
-	height: 710px;
-	min-width: 300px;
+	width: 40%;
+	min-width: 200px;
+	height: 700px;
 	margin-left: 2em;
 	border-radius: 15px;
 	text-align: center;
@@ -68,7 +79,7 @@ h1 {
 }
 
 .tftextinput{
-	width: 385px;
+	width: 60%;
 	margin: 0px;
 	padding: 5px 0px 5px 10px;
 	color: gray;
@@ -80,7 +91,8 @@ h1 {
 }
 
 .tfbutton {
-	width: 100px;
+	width: 27%;
+	min-width: 50px;
 	margin: 0px;
 	padding: 5px 15px;
 	font-size:14px;
@@ -141,8 +153,8 @@ h1 {
 
 #info {
 	display: table-row;
-	width: 500px; 
-	height: 400px; 
+	width: 90%; 
+	height: 55%; 
 	margin-top: 10px;
 	margin-right: auto;
 	margin-left: auto;
@@ -153,8 +165,8 @@ h1 {
 }
 
 .pano {
-	width: 500px; 
-	height: 400px;  
+	width: 90%; 
+	height: 50%;  
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
@@ -162,7 +174,7 @@ h1 {
 
 .view {
 	font-weight: bold;
-	width: 230px;
+	width: 44.8%;
 	height: 26px;
 	font-size:14px;
 	outline: none;

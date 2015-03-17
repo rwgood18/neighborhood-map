@@ -113,7 +113,7 @@ function ViewModel () {
   this.searchString = ko.observable("Search for a Place");
   var pLen = data.places.length;
   initialize = function () {
-    var kc = new google.maps.LatLng(39.092279,-94.595722);
+    var kc = new google.maps.LatLng(39.092279,-94.589722);
     var mapOptions = {
       center: kc,
       zoom: 15
