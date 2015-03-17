@@ -114,13 +114,17 @@ h1 {
 	clear:both;
 }
 
+.images {
+	width: 485px;
+}
+
 .image {
-	width: 33%;
+	width: 33.33%;
 	float: left;
 }
 
 .tips {
-	width: 460px;
+	width: 455px;
 	padding: 15px;
 	margin-left: auto;
 	margin-right: auto;
@@ -137,18 +141,21 @@ h1 {
 
 #info {
 	display: table-row;
-	position: relative;
 	width: 500px; 
-	height: 600px; 
-	padding: 15px;
-	float: right;
+	height: 400px; 
+	margin-top: 10px;
+	margin-right: auto;
+	margin-left: auto;
 	border-radius: 25px;
 	display: none;
+	overflow-y: scroll;
+	border-radius: 0px;
 }
 
 .pano {
 	width: 500px; 
 	height: 400px;  
+	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
 }
