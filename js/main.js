@@ -110,7 +110,7 @@ function ViewModel () {
     self.names.push( info.name);
   })
 
-  this.searchString = ko.observable("Search for a Place");
+  this.searchString = ko.observable("Search for a Venue");
   var pLen = data.places.length;
   initialize = function () {
     var kc = new google.maps.LatLng(39.092279,-94.589722);

@@ -1,14 +1,3 @@
-@media (max-width: 460px) {
-  .sidebar {
-    margin-left: 5px;
-    height: 400px;
-  }
-  .tfbutton {
-  	padding: 5px 5px;
-  }
-}
-
-
 body {
 	font-family: 'Droid Sans';
 	font-size: 12px;
@@ -28,7 +17,7 @@ h1 {
 	position:fixed;
     top: 0;
     left: 0;
-    width:100%;
+    width: 100%;
     height: 100vh;
     opacity: 10;
 	position: absolute;
