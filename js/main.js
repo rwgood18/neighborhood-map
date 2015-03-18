@@ -193,9 +193,25 @@ function ViewModel () {
     $('#pre-click').css('display', 'none');
     $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
       success: function (response) {
-        $('#img0').attr('src', response.response.photos.items[0].prefix + "200x200" + response.response.photos.items[0].suffix);
-        $('#img1').attr('src', response.response.photos.items[1].prefix + "200x200" + response.response.photos.items[1].suffix);
-        $('#img2').attr('src', response.response.photos.items[2].prefix + "200x200" + response.response.photos.items[2].suffix);
+        if (response.response.photos.items.length == 0) {
+          $('.img-error').text('There are no available images for this venue.');
+          for (var i=0; i<3; i++) {
+            $('#img' + i).attr('src', '');
+          }
+        } else {
+          $('.img-error').text('');
+          for (var i=0; i<3; i++) {
+            $('#img' + i).attr('src', response.response.photos.items[i].prefix + "200x200" + response.response.photos.items[i].suffix);
+          }
+        }
+
+        for (var i=0; i<3; i++) {
+          if ($('#img' + i).attr('src') == '') {
+            $('#img' + i).css('display', 'none');
+          } else {
+            $('#img' + i).css('display', 'block');
+          }
+        }
       },
       error: function (jqXHR, textStatus, errorThrown) {
         if (textStatus == 'error') {
@@ -207,10 +223,11 @@ function ViewModel () {
 
     $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/tips?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
       success: function (response) {
+        $('.tip-list').empty();
         var len = response.response.tips.items.length;
         for (var i=0; i<len; i++) {
           var text = response.response.tips.items[i].text;
-          $('.tips').append("<p>" + text + "</p>");
+          $('.tip-list').append("<p>" + text + "</p>");
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
