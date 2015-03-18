@@ -158,6 +158,7 @@ function ViewModel () {
 
   clearText = function () {
     this.searchString("");
+    $('#search').css('color', 'black');
   }
   
   $(function() {
@@ -189,18 +190,34 @@ function ViewModel () {
  
   getFoursquare = function (place) {
     infoChanger();
-    $.getJSON('https://api.foursquare.com/v2/venues/' + place.vid + '/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
-      $('#img0').attr('src', response.response.photos.items[0].prefix + "200x200" + response.response.photos.items[0].suffix);
-      $('#img1').attr('src', response.response.photos.items[1].prefix + "200x200" + response.response.photos.items[1].suffix);
-      $('#img2').attr('src', response.response.photos.items[2].prefix + "200x200" + response.response.photos.items[2].suffix);
+    $('#pre-click').css('display', 'none');
+    $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
+      success: function (response) {
+        $('#img0').attr('src', response.response.photos.items[0].prefix + "200x200" + response.response.photos.items[0].suffix);
+        $('#img1').attr('src', response.response.photos.items[1].prefix + "200x200" + response.response.photos.items[1].suffix);
+        $('#img2').attr('src', response.response.photos.items[2].prefix + "200x200" + response.response.photos.items[2].suffix);
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        if (textStatus == 'error') {
+          $('.img-error').text('Error: The requested images are unavailable.');
+          $('.image').css('height', '0');
+        }
+      }
     })
 
-    $.getJSON('https://api.foursquare.com/v2/venues/' + place.vid + '/tips?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', function (response) {
-      $('#p0').text(response.response.tips.items[0].text);
-      $('#p1').text(response.response.tips.items[1].text);
-      $('#p2').text(response.response.tips.items[2].text);
-      $('#p3').text(response.response.tips.items[3].text);
-      $('#p4').text(response.response.tips.items[4].text);
+    $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/tips?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
+      success: function (response) {
+        var len = response.response.tips.items.length;
+        for (var i=0; i<len; i++) {
+          var text = response.response.tips.items[i].text;
+          $('.tips').append("<p>" + text + "</p>");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        if (textStatus == 'error') {
+          $('.tip-error').text('Error: The requested data is unavailable.');
+        }
+      }
     })
   }
 
