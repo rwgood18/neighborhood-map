@@ -55,12 +55,14 @@
     </div>
     	<div id="sidebar" class="sidebar top">
 			<form id="tfnewsearch" method="get" action="">
-        	  <input type="text" id="search" class="tftextinput" data-bind="textInput: searchString, click: clearText"><input type="submit" value="Search" class="tfbutton">
+        	  <input type="text" id="search" class="tftextinput" data-bind="textInput: searchString, click: clearText, event: {keyup: filter}"><input type="submit" value="Search" class="tfbutton">
 			</form>
             <div class="ui-widget"></div>
             <div class="place-list-div">
                 <ul class="place-list" data-bind="foreach: buffer">
-                    <li class="place" data-bind="text: name, click: preGetFoursquare"></li>
+                    <div data-bind="if: show">
+                        <li class="place" data-bind="text: name, click: preGetFoursquare"></li>
+                    </div>    
                 </ul>
             </div>
             <div id="pano" class="pano"></div>

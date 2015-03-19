@@ -5,85 +5,99 @@ var data = {
     name: 'Kauffman Center for the Performing Arts',
     Lat: 39.094114,
     Lng: -94.587513,
-    vid: '4bc4e070abf4952177b4c593'
+    vid: '4bc4e070abf4952177b4c593',
+    show: false
     },
     {
     name: 'Sprint Center',
     Lat: 39.098403,
     Lng: -94.580485,
-    vid: '4abb8024f964a520df8320e3'
+    vid: '4abb8024f964a520df8320e3',
+    show: true
     },
     {
     name: 'KC Live!',
     Lat: 39.098036,
     Lng: -94.581644,
-    vid: '4c34bf94a0ced13a83b0186e'
+    vid: '4c34bf94a0ced13a83b0186e',
+    show: true
     },
     {
     name: 'Bartle Hall',
     Lat: 39.098611,
     Lng: -94.587105,
-    vid: '4c03d3c6f56c2d7fb1591d66'
+    vid: '4c03d3c6f56c2d7fb1591d66',
+    show: true
     },
     {
     name: 'Folly Theater',
     Lat: 39.100426,
     Lng: -94.587212,
-    vid: '4ad4c01ff964a520eff120e3'
+    vid: '4ad4c01ff964a520eff120e3',
+    show: true
     },
     {
     name: 'Municipal Auditorium',
     Lat: 39.098095,
     Lng: -94.586407,
-    vid: '4ad4c01ff964a520f2f120e3'
+    vid: '4ad4c01ff964a520f2f120e3',
+    show: true
     },
     {
     name: 'The Midland',
     Lat: 39.099069,
     Lng: -94.583704,
-    vid: '4ad4c01ff964a520eef120e3'
+    vid: '4ad4c01ff964a520eef120e3',
+    show: true
     },
     {
     name: 'Kansas City Marriott',
     Lat: 39.101159,
     Lng: -94.58628,
-    vid: '4ada400af964a520872021e3'
+    vid: '4ada400af964a520872021e3',
+    show: true
     },
     {
     name: 'National World War I Museum at Liberty Memorial',
     Lat: 39.08134,
     Lng: -94.585937,
-    vid: '4f9c0ba5e4b04dd7353a754d'
+    vid: '4f9c0ba5e4b04dd7353a754d',
+    show: true
     },
     {
     name: 'Union Station',
     Lat: 39.085396,
     Lng: -94.585474,
-    vid: '4f885099e4b0cec3aa2c928a'
+    vid: '4f885099e4b0cec3aa2c928a',
+    show: true
     },
     {
     name: 'Crown Center',
     Lat: 39.083314,
     Lng: -94.582127,
-    vid: '4ad4c01ff964a520fff120e3'
+    vid: '4ad4c01ff964a520fff120e3',
+    show: true
     },
     {
     name: 'Kansas City Public Library',
     Lat: 39.116743,
     Lng: -94.583466,
-    vid: '4b13eb34f964a5207a9a23e3'
+    vid: '4b13eb34f964a5207a9a23e3',
+    show: true
     },
     {
     name: 'Nelson-Atkins Museum of Art',
     Lat: 39.045161,
     Lng: -94.580914,
-    vid: '4ad4c01ef964a520aff120e3'
+    vid: '4ad4c01ef964a520aff120e3',
+    show: true
     },
     {
     name: 'Uptown Theater',
     Lat: 39.061349,
     Lng: -94.590645,
-    vid: '4ad4c01ff964a520f1f120e3'
+    vid: '4ad4c01ff964a520f1f120e3',
+    show: true
     }
   ]
 };
@@ -94,18 +108,23 @@ var Place = function (info) {
   this.Lat = ko.observable(info.Lat);
   this.Lng = ko.observable(info.Lng);
   this.vid = info.vid;
+  this.show = ko.observable(true);
 };
 
 //ViewModel
 function ViewModel () {
   var self = this;
 
+  self.searchString = ko.observable();
+
   //initialize observable arrays
+  self.places = ko.observableArray([]);
   self.buffer = ko.observableArray([]);
   self.names = ko.observableArray([]);
 
   //add content to observable arrays
   data.places.forEach(function(info) {
+    self.places.push( new Place(info));
     self.buffer.push( new Place(info));
   })
   data.places.forEach(function(info) {
@@ -117,6 +136,9 @@ function ViewModel () {
   //create variable for number of places in data.places
   var pLen = data.places.length;
 
+  
+
+
   //create the background map
   initialize = function () {
     var kc = new google.maps.LatLng(39.092279,-94.589722);
@@ -127,22 +149,24 @@ function ViewModel () {
     var map = new google.maps.Map(
       document.getElementById('map-canvas'), mapOptions);
     
+    mark = function() {
     //add marker for each location in data.places
-    for (i = 0; i < pLen; i++) {
-      var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(data.places[i].Lat, data.places[i].Lng),
-          map: map,
-          title: data.places[i].name
-      });
+      for (i = 0; i < pLen; i++) {
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(data.places[i].Lat, data.places[i].Lng),
+            map: map,
+            title: self.buffer()[i].name()
+        });
 
-      //return a function that calls get foursquare() when user clicks a marker
-      google.maps.event.addListener(marker, 'click', (function(icopy) {
-        return function () {
-          getFoursquare(data.places[icopy]);
-        }
-      })(i))
+        //return a function that calls get foursquare() when user clicks a marker
+        google.maps.event.addListener(marker, 'click', (function(icopy) {
+          return function () {
+            getFoursquare(data.places[icopy]);
+          }
+        })(i))
+      }
     }
-
+    mark();
     //create streetview element
     var panoramaOptions = {
       position: kc,
@@ -172,7 +196,19 @@ function ViewModel () {
     this.searchString("");
     $('#search').css('color', 'black');
   }
+
+  filter = function () {
+    for (var i=0; i<14; i++) {     
+      if (self.places()[i].name().includes(self.searchString()) == false) {
+          self.buffer()[i].show(false);
+      } else {
+        self.buffer()[i].show(true);
+      }
+    }
+    self.initialize().mark();
+  }
   
+  /*
   //autocomplete functionality for search bar
   $(function() {
     $( "#search" ).autocomplete({
@@ -187,6 +223,7 @@ function ViewModel () {
       }
     });
   })
+*/
 
   //search() is called when the user clicks the search button
   search = function () {
@@ -203,7 +240,7 @@ function ViewModel () {
     getFoursquare(this);
   }
   
-  //makes a 2 requests to the foursquare api
+  //makes 2 requests to the foursquare api
   getFoursquare = function (place) {
     infoChanger();
 
