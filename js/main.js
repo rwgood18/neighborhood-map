@@ -138,7 +138,7 @@ function ViewModel () {
 
   
 
-
+  var initialize = {};
   //create the background map
   initialize = function () {
     var kc = new google.maps.LatLng(39.092279,-94.589722);
@@ -148,7 +148,10 @@ function ViewModel () {
     };
     var map = new google.maps.Map(
       document.getElementById('map-canvas'), mapOptions);
-    
+    this.accesMark = function () {
+      mark();
+    }
+
     mark = function() {
     //add marker for each location in data.places
       for (i = 0; i < pLen; i++) {
@@ -205,7 +208,7 @@ function ViewModel () {
         self.buffer()[i].show(true);
       }
     }
-    self.initialize().mark();
+    self.initialize.accessMark();
   }
   
   /*
