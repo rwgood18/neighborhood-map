@@ -6,7 +6,7 @@ var data = {
     Lat: 39.094114,
     Lng: -94.587513,
     vid: '4bc4e070abf4952177b4c593',
-    show: false
+    show: true
     },
     {
     name: 'Sprint Center',
@@ -137,29 +137,33 @@ function ViewModel () {
   var pLen = data.places.length;
 
   
-
-  var initialize = {};
-  //create the background map
-  initialize = function () {
-    var kc = new google.maps.LatLng(39.092279,-94.589722);
-    var mapOptions = {
-      center: kc,
+  var kcMap;
+  
+  var Map = function() {
+    //create the background map
+    
+    this.kc = new google.maps.LatLng(39.092279,-94.589722);
+    this.mapOptions = {
+      center: this.kc,
       zoom: 15
     };
-    var map = new google.maps.Map(
-      document.getElementById('map-canvas'), mapOptions);
-    this.accesMark = function () {
-      mark();
-    }
+    this.map = new google.maps.Map(
+        document.getElementById('map-canvas'), this.mapOptions);
 
-    mark = function() {
-    //add marker for each location in data.places
+    this.markers = [];
+
+    this.mark = function() {
+    //add marker for each location in self.buffer()
+    
       for (i = 0; i < pLen; i++) {
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(data.places[i].Lat, data.places[i].Lng),
-            map: map,
-            title: self.buffer()[i].name()
-        });
+        if (self.buffer()[i].show() == true) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(self.buffer()[i].Lat(), self.buffer()[i].Lng()),
+              map: this.map,
+              title: self.buffer()[i].name()
+          });
+        }
+        this.markers.push(marker);
 
         //return a function that calls get foursquare() when user clicks a marker
         google.maps.event.addListener(marker, 'click', (function(icopy) {
@@ -169,17 +173,43 @@ function ViewModel () {
         })(i))
       }
     }
-    mark();
+    this.mark();
+
+
+    // Sets the map on all markers in the array.
+    this.setAllMap = function (map) {
+      for (var i = 0; i < this.markers.length; i++) {
+          this.markers[i].setMap(map);
+      }
+    }
+
+    // Removes the markers from the map, but keeps them in the array.
+    this.clearMarkers = function() {
+      this.setAllMap(null);
+    }
+
+    // Shows any markers currently in the array.
+    this.showMarkers = function () {
+      this.setAllMap(this.map);
+    }
+
+    // Deletes all markers in the array by removing references to them.
+    this.deleteMarkers = function () {
+      this.clearMarkers();
+      this.markers = [];
+    }
+
+
     //create streetview element
-    var panoramaOptions = {
-      position: kc,
+    this.panoramaOptions = {
+      position: this.kc,
       pov: {
         heading: 34,
         pitch: 10
       }
     };
-    var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
-    map.setStreetView(panorama);
+    this.panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), this.panoramaOptions);
+      this.map.setStreetView(this.panorama);
   }
 
   //change to streetview
@@ -201,17 +231,20 @@ function ViewModel () {
   }
 
   filter = function () {
+    //  TODO: CHANGE ALL LETTERS TO LOWERCASE
     for (var i=0; i<14; i++) {     
       if (self.places()[i].name().includes(self.searchString()) == false) {
           self.buffer()[i].show(false);
+
       } else {
         self.buffer()[i].show(true);
       }
     }
-    self.initialize.accessMark();
+    kcMap.deleteMarkers();
+    kcMap.mark();
   }
   
-  /*
+  /*kcMap.
   //autocomplete functionality for search bar
   $(function() {
     $( "#search" ).autocomplete({
@@ -304,7 +337,7 @@ function ViewModel () {
   }
 
   //call initialize() when the page loads
-  google.maps.event.addDomListener(window, 'load', initialize);
+  google.maps.event.addDomListener(window, 'load', kcMap = new Map());
 }
 
 ko.applyBindings(new ViewModel());
