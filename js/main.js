@@ -130,31 +130,31 @@ function ViewModel () {
   data.places.forEach(function(info) {
     self.names.push( info.name);
   })
+
   //initialize search bar with search instructions
   this.searchString = ko.observable("Search for a Venue");
 
   //create variable for number of places in data.places
   var pLen = data.places.length;
 
-  
+  //declare map vairable
   var kcMap;
   
+  //create a map class
   var Map = function() {
-    //create the background map
-    
+        
     this.kc = new google.maps.LatLng(39.092279,-94.589722);
     this.mapOptions = {
       center: this.kc,
       zoom: 15
     };
     this.map = new google.maps.Map(
-        document.getElementById('map-canvas'), this.mapOptions);
+      document.getElementById('map-canvas'), this.mapOptions);
 
     this.markers = [];
 
     this.mark = function() {
     //add marker for each location in self.buffer()
-    
       for (i = 0; i < pLen; i++) {
         if (self.buffer()[i].show() == true) {
           var marker = new google.maps.Marker({
@@ -199,7 +199,6 @@ function ViewModel () {
       this.markers = [];
     }
 
-
     //create streetview element
     this.panoramaOptions = {
       position: this.kc,
@@ -231,8 +230,8 @@ function ViewModel () {
   }
 
   filter = function () {
-    //  TODO: CHANGE ALL LETTERS TO LOWERCASE
-    for (var i=0; i< data.places.length; i++) {     
+    //Compare user text input to venue names. If they match, set "show" property to true.
+    for (var i=0; i< pLen; i++) {     
       if (self.places()[i].name().toLowerCase().includes(self.searchString().toLowerCase()) == false) {
           self.buffer()[i].show(false);
 
@@ -244,23 +243,6 @@ function ViewModel () {
     kcMap.mark();
   }
   
-  /*kcMap.
-  //autocomplete functionality for search bar
-  $(function() {
-    $( "#search" ).autocomplete({
-      appendTo: ".place-list",
-      source: self.names(),
-
-      //this function is called when the user selects a suggestion from the list
-      select: function (event, ui) {
-        var x = window.setTimeout(function(){
-          search();
-        }, 10);
-      }
-    });
-  })
-*/
-
   //search() is called when the user clicks the search button
   search = function () {
     var term = $('#search').val();
@@ -336,7 +318,7 @@ function ViewModel () {
     })
   }
 
-  //call initialize() when the page loads
+  //instaniate Map when the page loads
   google.maps.event.addDomListener(window, 'load', kcMap = new Map());
 }
 
