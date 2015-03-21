@@ -233,7 +233,7 @@ function ViewModel () {
   filter = function () {
     //  TODO: CHANGE ALL LETTERS TO LOWERCASE
     for (var i=0; i< data.places.length; i++) {     
-      if (self.places()[i].name().includes(self.searchString()) == false) {
+      if (self.places()[i].name().toLowerCase().includes(self.searchString().toLowerCase()) == false) {
           self.buffer()[i].show(false);
 
       } else {
