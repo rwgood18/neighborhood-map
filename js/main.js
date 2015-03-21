@@ -153,8 +153,8 @@ function ViewModel () {
     this.markers = [];
 
     this.mark = function() {
-      
     //add marker for each location in self.buffer()
+    
       for (i = 0; i < pLen; i++) {
         if (self.buffer()[i].show() == true) {
           var marker = new google.maps.Marker({
@@ -162,7 +162,7 @@ function ViewModel () {
               map: this.map,
               title: self.buffer()[i].name()
           });
-        } else {break}
+        } else {continue}
         this.markers.push(marker);
 
         //return a function that calls get foursquare() when user clicks a marker
@@ -174,6 +174,7 @@ function ViewModel () {
       }
     }
     this.mark();
+
 
     // Sets the map on all markers in the array.
     this.setAllMap = function (map) {
@@ -187,11 +188,17 @@ function ViewModel () {
       this.setAllMap(null);
     }
 
+    // Shows any markers currently in the array.
+    this.showMarkers = function () {
+      this.setAllMap(this.map);
+    }
+
     // Deletes all markers in the array by removing references to them.
     this.deleteMarkers = function () {
       this.clearMarkers();
       this.markers = [];
     }
+
 
     //create streetview element
     this.panoramaOptions = {
@@ -225,7 +232,7 @@ function ViewModel () {
 
   filter = function () {
     //  TODO: CHANGE ALL LETTERS TO LOWERCASE
-    for (var i=0; i<data.places.length; i++) {     
+    for (var i=0; i< data.places.length; i++) {     
       if (self.places()[i].name().includes(self.searchString()) == false) {
           self.buffer()[i].show(false);
 
@@ -236,6 +243,23 @@ function ViewModel () {
     kcMap.deleteMarkers();
     kcMap.mark();
   }
+  
+  /*kcMap.
+  //autocomplete functionality for search bar
+  $(function() {
+    $( "#search" ).autocomplete({
+      appendTo: ".place-list",
+      source: self.names(),
+
+      //this function is called when the user selects a suggestion from the list
+      select: function (event, ui) {
+        var x = window.setTimeout(function(){
+          search();
+        }, 10);
+      }
+    });
+  })
+*/
 
   //search() is called when the user clicks the search button
   search = function () {
