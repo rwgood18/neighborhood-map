@@ -233,15 +233,16 @@ function ViewModel () {
   }
 
   filter = function () {
-    //Compare search bar text input to venue names. If they match, set "show" property to true.
+    //Compare user text input to venue names. If they match, set "show" property to true.
     for (var i=0; i< pLen; i++) {     
       if (self.places()[i].name().toLowerCase().search(self.searchString().toLowerCase()) == -1) {
           self.buffer()[i].show(false);
-
       } else {
         self.buffer()[i].show(true);
       }
     }
+    kcMap.deleteMarkers();
+    kcMap.mark();
   }
   
   //search() is called when the user clicks the search button
