@@ -58,6 +58,9 @@ h1 {
 	min-width: 200px;
 	height: 700px;
 	margin-left: 2em;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
 	border-radius: 15px;
 	text-align: center;
 }

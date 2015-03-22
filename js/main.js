@@ -160,6 +160,7 @@ function ViewModel () {
           var marker = new google.maps.Marker({
               position: new google.maps.LatLng(self.buffer()[i].Lat(), self.buffer()[i].Lng()),
               map: this.map,
+              icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
               title: self.buffer()[i].name()
           });
 
@@ -167,12 +168,17 @@ function ViewModel () {
         this.markers.push(marker);
 
         //return a function that calls get foursquare() when user clicks a marker
-        google.maps.event.addListener(marker, 'click', (function(icopy) {
+        google.maps.event.addListener(marker, 'click', (function(iCopy, markersCopy) {
           return function () {
-            getFoursquare(data.places[icopy]);
+            getFoursquare(data.places[iCopy]);
             this.setAnimation(google.maps.Animation.DROP);
+            //change marker color to green when its name is clicked
+            for (marker in markersCopy) {
+              markersCopy[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+            }
+            this.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
           }
-        })(i))
+        })(i, this.markers))
       }
     }
     this.mark();
@@ -181,7 +187,8 @@ function ViewModel () {
     // Sets the map on all markers in the array.
     this.setAllMap = function (map) {
       for (var i = 0; i < this.markers.length; i++) {
-          this.markers[i].setMap(map);
+        this.markers[i].setMap(map);
+        
       }
     }
 
@@ -209,6 +216,7 @@ function ViewModel () {
         pitch: 10
       }
     };
+    //create panorama
     this.panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), this.panoramaOptions);
       this.map.setStreetView(this.panorama);
   }
@@ -259,6 +267,16 @@ function ViewModel () {
   //called when user clicks on a venue from the venue list
   preGetFoursquare = function () {
     getFoursquare(this);
+    //change marker color to green when its corresponding name is clicked
+    for (marker in kcMap.markers) {
+      if (this.name() == kcMap.markers[marker].title) {
+        kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+        kcMap.markers[marker].setAnimation(google.maps.Animation.DROP);
+      } else {
+        //change all markers whose corresponding names weren't clicked to red
+        kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+      }
+    }
   }
   
   //makes 2 requests to the foursquare api
