@@ -148,8 +148,7 @@ function ViewModel () {
       center: this.kc,
       zoom: 15
     };
-    this.map = new google.maps.Map(
-      document.getElementById('map-canvas'), this.mapOptions);
+    this.map = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
     this.markers = [];
 
@@ -163,7 +162,6 @@ function ViewModel () {
               icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
               title: self.buffer()[i].name()
           });
-
         } else {continue}
         this.markers.push(marker);
 
@@ -182,7 +180,6 @@ function ViewModel () {
       }
     }
     this.mark();
-
 
     // Sets the map on all markers in the array.
     this.setAllMap = function (map) {
@@ -257,32 +254,37 @@ function ViewModel () {
   search = function () {
     var loopSwitch = true;    
     for (var i=0; i<pLen; i++) {
-      
+      //complete the search bar text with the first match in self.buffer()
       if (loopSwitch == true) {
         if (self.buffer()[i].show() == true) {
           self.searchString(self.buffer()[i].name());
           loopSwitch = false;
-        }
-        
-      }
-      if (data.places[i].name == self.searchString()) {
-        getFoursquare(data.places[i]);
+        } 
       }
     }
-    
+      //call getFoursquare on the place whose name matches the text in the search bar
+    for (place in self.buffer()) {  
+      if (self.buffer()[place].name() == self.searchString()) {
+        getFoursquare(self.buffer()[place]);
+        changeColor.call(self.buffer()[place]);
+      }
+    } 
     infoChanger();
   }
-
+  
   //called when user clicks on a venue from the venue list
   preGetFoursquare = function () {
     getFoursquare(this);
+    changeColor.call(this);
+  }
+
+  changeColor = function () {
     //change marker color to green when its corresponding name is clicked
     for (marker in kcMap.markers) {
       if (this.name() == kcMap.markers[marker].title) {
-        kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
         kcMap.markers[marker].setAnimation(google.maps.Animation.DROP);
+        kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
       } else {
-        //change all markers whose corresponding names weren't clicked to red
         kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
       }
     }
@@ -291,10 +293,8 @@ function ViewModel () {
   //makes 2 requests to the foursquare api
   getFoursquare = function (place) {
     infoChanger();
-
     //hide instructions
     $('#pre-click').css('display', 'none');
-
     //request for images
     $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
       success: function (response) {
