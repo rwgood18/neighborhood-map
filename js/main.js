@@ -162,6 +162,7 @@ function ViewModel () {
               map: this.map,
               title: self.buffer()[i].name()
           });
+
         } else {continue}
         this.markers.push(marker);
 
@@ -169,6 +170,7 @@ function ViewModel () {
         google.maps.event.addListener(marker, 'click', (function(icopy) {
           return function () {
             getFoursquare(data.places[icopy]);
+            this.setAnimation(google.maps.Animation.DROP);
           }
         })(i))
       }
@@ -227,6 +229,7 @@ function ViewModel () {
   clearText = function () {
     this.searchString("");
     $('#search').css('color', 'black');
+    filter();
   }
 
   filter = function () {
@@ -251,6 +254,7 @@ function ViewModel () {
         getFoursquare(data.places[i]);
       }
     }
+    infoChanger();
   }
 
   //called when user clicks on a venue from the venue list
