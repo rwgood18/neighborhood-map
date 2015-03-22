@@ -233,32 +233,15 @@ function ViewModel () {
   }
 
   filter = function () {
-    //object detection: check if browser is compatible with the includes() method
-    if ("string".includes) {
-      //Compare user text input to venue names. If they match, set "show" property to true.
-      for (var i=0; i< pLen; i++) {     
-        if (self.places()[i].name().toLowerCase().includes(self.searchString().toLowerCase()) == false) {
-            self.buffer()[i].show(false);
+    //Compare search bar text input to venue names. If they match, set "show" property to true.
+    for (var i=0; i< pLen; i++) {     
+      if (self.places()[i].name().toLowerCase().search(self.searchString().toLowerCase()) == -1) {
+          self.buffer()[i].show(false);
 
-        } else {
-          self.buffer()[i].show(true);
-        }
+      } else {
+        self.buffer()[i].show(true);
       }
     }
-    //object detection: check if browser is compatible with the contains() method
-    if ("string".contains) {
-      //Compare user text input to venue names. If they match, set "show" property to true.
-      for (var i=0; i< pLen; i++) {     
-        if (self.places()[i].name().toLowerCase().contains(self.searchString().toLowerCase()) == false) {
-            self.buffer()[i].show(false);
-
-        } else {
-          self.buffer()[i].show(true);
-        }
-      }
-    }
-    kcMap.deleteMarkers();
-    kcMap.mark();
   }
   
   //search() is called when the user clicks the search button
