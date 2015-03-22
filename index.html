@@ -30,15 +30,25 @@
           }
           .tips {
             text-align: left;
+            width: auto;
+          }
+          .pano {
+            max-height: 41%;
+          }
+          .images {
+            width: auto;
+          }
+          #info {
+            max-height: 41%;
           }
         }
 
-        @media (max-height: 600px) {
+        @media (max-height: 700px) {
             .sidebar {
                 height: 400px;
             }
             .map {
-                height: 457px;
+                height: 557px;
           }
         }
 
@@ -61,9 +71,9 @@
     	<h1 class="font-effect-shadow-multiple">Neighborhood Map: Kansas City</h1>
     </div>
     	<div id="sidebar" class="sidebar top">
-			<div id="tfnewsearch" method="get" action="">
-        	  <input type="text" id="search" class="tftextinput" autocomplete="off" data-bind="textInput: searchString, click: clearText, event: {keyup: filter}"><button data-bind="click: search" class="tfbutton">Search</button>
-			</div>
+			<form id="tfnewsearch" method="get" action="">
+        	  <input type="text" id="search" class="tftextinput" autocomplete="off" data-bind="textInput: searchString, click: clearText, event: {keyup: filter}"><button data-bind="click: search, submit: search" class="tfbutton">Search</button>
+			</form>
             <div class="ui-widget"></div>
             <div class="place-list-div">
                 <ul class="place-list" data-bind="foreach: buffer">

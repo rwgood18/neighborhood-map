@@ -132,7 +132,7 @@ function ViewModel () {
   })
 
   //initialize search bar with search instructions
-  this.searchString = ko.observable("Search for a Venue");
+  self.searchString = ko.observable("Search for a Venue");
 
   //create variable for number of places in data.places
   var pLen = data.places.length;
@@ -255,12 +255,21 @@ function ViewModel () {
   
   //search() is called when the user clicks the search button
   search = function () {
-    var term = $('#search').val();
+    var loopSwitch = true;    
     for (var i=0; i<pLen; i++) {
-      if (data.places[i].name == term) {
+      
+      if (loopSwitch == true) {
+        if (self.buffer()[i].show() == true) {
+          self.searchString(self.buffer()[i].name());
+          loopSwitch = false;
+        }
+        
+      }
+      if (data.places[i].name == self.searchString()) {
         getFoursquare(data.places[i]);
       }
     }
+    
     infoChanger();
   }
 
