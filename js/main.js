@@ -146,7 +146,7 @@ function ViewModel () {
     this.kc = new google.maps.LatLng(39.092279,-94.589722);
     this.mapOptions = {
       center: this.kc,
-      zoom: 15
+      zoom: 14
     };
     this.map = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
@@ -226,6 +226,7 @@ function ViewModel () {
 
   //change to info view
   infoChanger = function () {
+    $('.tips-h2').css('display', 'block');
     $('#info').css('display', 'block');
     $('#pano').css('display', 'none');
   }
@@ -238,22 +239,27 @@ function ViewModel () {
   }
 
   filter = function () {
-    //Compare user text input to venue names. If they match, set "show" property to true.
-    for (var i=0; i< pLen; i++) {     
-      if (self.places()[i].name().toLowerCase().search(self.searchString().toLowerCase()) == -1) {
-          self.buffer()[i].show(false);
-      } else {
-        self.buffer()[i].show(true);
+    if (event.keyCode == 13) {
+      return;
+    } else { 
+      //Compare user text input to venue names. If they match, set "show" property to true.
+      for (var i=0; i< pLen; i++) {     
+        if (self.places()[i].name().toLowerCase().search(self.searchString().toLowerCase()) == -1) {
+            self.buffer()[i].show(false);
+        } else {
+          self.buffer()[i].show(true);
+        }
       }
+      kcMap.deleteMarkers();
+      kcMap.mark();
     }
-    kcMap.deleteMarkers();
-    kcMap.mark();
   }
   
   //search() is called when the user clicks the search button
   search = function () {
-    var loopSwitch = true;    
-    for (var i=0; i<pLen; i++) {
+    var loopSwitch = true;
+    var len = self.buffer().length;  
+    for (var i=0; i<len; i++) {
       //complete the search bar text with the first match in self.buffer()
       if (loopSwitch == true) {
         if (self.buffer()[i].show() == true) {
@@ -262,7 +268,7 @@ function ViewModel () {
         } 
       }
     }
-      //call getFoursquare on the place whose name matches the text in the search bar
+    //call getFoursquare() and changeColor() on the place whose name matches the text in the search bar
     for (place in self.buffer()) {  
       if (self.buffer()[place].name() == self.searchString()) {
         getFoursquare(self.buffer()[place]);
@@ -279,7 +285,7 @@ function ViewModel () {
   }
 
   changeColor = function () {
-    //change marker color to green when its corresponding name is clicked
+    //change marker color to green when its corresponding name is clicked and change the others to red
     for (marker in kcMap.markers) {
       if (this.name() == kcMap.markers[marker].title) {
         kcMap.markers[marker].setAnimation(google.maps.Animation.DROP);

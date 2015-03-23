@@ -2,12 +2,14 @@ body {
 	font-family: 'Droid Sans';
 	font-size: 12px;
 }
+
 h1 {
 	font-size: 35px;
 	font-weight: bold;
 	text-align: center;
 	z-index: 10;
 }
+
 .top {
 	position: relative;
 	z-index: 10;
@@ -59,8 +61,7 @@ h1 {
 	height: 700px;
 	margin-left: 2em;
 	border-style: solid;
-	border-color: black;
-	border-width: 1px;
+	border: solid 1px #0076a3;
 	border-radius: 15px;
 	text-align: center;
 }
@@ -130,8 +131,8 @@ h1 {
 }
 
 .tips {
-	width: 455px;
-	padding: 15px;
+	width: 95%;
+	padding: 10px;
 	margin-left: auto;
 	margin-right: auto;
 	height: auto;
@@ -141,6 +142,10 @@ h1 {
 
 }
 
+.tips-h2 {
+	display: none;
+}
+
 .tips p {
 	text-align: left;
 }
@@ -148,7 +153,7 @@ h1 {
 #info {
 	display: table-row;
 	width: 90%; 
-	height: 50%; 
+	height: 350px; 
 	margin-top: 10px;
 	margin-right: auto;
 	margin-left: auto;
@@ -160,7 +165,7 @@ h1 {
 
 .pano {
 	width: 90%; 
-	height: 50%;  
+	height: 350px;  
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
