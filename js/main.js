@@ -126,10 +126,10 @@ function ViewModel () {
   data.places.forEach(function(info) {
     self.places.push( new Place(info));
     self.buffer.push( new Place(info));
-  })
+  });
   data.places.forEach(function(info) {
     self.names.push( info.name);
-  })
+  });
 
   //initialize search bar with search instructions
   self.searchString = ko.observable("Search for a Venue");
@@ -154,15 +154,17 @@ function ViewModel () {
 
     this.mark = function() {
     //add marker for each location in self.buffer()
+    var bLen = self.buffer().length;
       for (i = 0; i < pLen; i++) {
-        if (self.buffer()[i].show() == true) {
-          var marker = new google.maps.Marker({
+        var marker;
+        if (self.buffer()[i].show() === true) {
+          marker = new google.maps.Marker({
               position: new google.maps.LatLng(self.buffer()[i].Lat(), self.buffer()[i].Lng()),
               map: this.map,
               icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
               title: self.buffer()[i].name()
           });
-        } else {continue}
+        } else {continue;}
         this.markers.push(marker);
 
         //return a function that calls get foursquare() when user clicks a marker
@@ -171,14 +173,14 @@ function ViewModel () {
             getFoursquare(data.places[iCopy]);
             this.setAnimation(google.maps.Animation.DROP);
             //change marker color to green when its name is clicked
-            for (marker in markersCopy) {
+            for (var marker in markersCopy) {
               markersCopy[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
             }
             this.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-          }
-        })(i, this.markers))
+          };
+        })(i, this.markers));
       }
-    }
+    };
     this.mark();
 
     // Sets the map on all markers in the array.
@@ -187,23 +189,23 @@ function ViewModel () {
         this.markers[i].setMap(map);
         
       }
-    }
+    };
 
     // Removes the markers from the map, but keeps them in the array.
     this.clearMarkers = function() {
       this.setAllMap(null);
-    }
+    };
 
     // Shows any markers currently in the array.
     this.showMarkers = function () {
       this.setAllMap(this.map);
-    }
+    };
 
     // Deletes all markers in the array by removing references to them.
     this.deleteMarkers = function () {
       this.clearMarkers();
       this.markers = [];
-    }
+    };
 
     //create streetview element
     this.panoramaOptions = {
@@ -216,27 +218,27 @@ function ViewModel () {
     //create panorama
     this.panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), this.panoramaOptions);
       this.map.setStreetView(this.panorama);
-  }
+  };
 
   //change to streetview
   viewChanger = function () {
     $('#pano').css('display', 'block');
     $('#info').css('display', 'none');
-  }
+  };
 
   //change to info view
   infoChanger = function () {
     $('.tips-h2').css('display', 'block');
     $('#info').css('display', 'block');
     $('#pano').css('display', 'none');
-  }
+  };
 
   //clear text in search bar when user clicks to make a new search
   clearText = function () {
     this.searchString("");
     $('#search').css('color', 'black');
     filter();
-  }
+  };
 
   filter = function () {
     if (event.keyCode == 13) {
@@ -253,7 +255,7 @@ function ViewModel () {
       kcMap.deleteMarkers();
       kcMap.mark();
     }
-  }
+  };
   
   //search() is called when the user clicks the search button
   search = function () {
@@ -261,32 +263,32 @@ function ViewModel () {
     var len = self.buffer().length;  
     for (var i=0; i<len; i++) {
       //complete the search bar text with the first match in self.buffer()
-      if (loopSwitch == true) {
-        if (self.buffer()[i].show() == true) {
+      if (loopSwitch === true) {
+        if (self.buffer()[i].show() === true) {
           self.searchString(self.buffer()[i].name());
           loopSwitch = false;
         } 
       }
     }
     //call getFoursquare() and changeColor() on the place whose name matches the text in the search bar
-    for (place in self.buffer()) {  
+    for (var place in self.buffer()) {  
       if (self.buffer()[place].name() == self.searchString()) {
         getFoursquare(self.buffer()[place]);
         changeColor.call(self.buffer()[place]);
       }
     } 
     infoChanger();
-  }
+  };
   
   //called when user clicks on a venue from the venue list
   preGetFoursquare = function () {
     getFoursquare(this);
     changeColor.call(this);
-  }
+  };
 
   changeColor = function () {
     //change marker color to green when its corresponding name is clicked and change the others to red
-    for (marker in kcMap.markers) {
+    for (var marker in kcMap.markers) {
       if (this.name() == kcMap.markers[marker].title) {
         kcMap.markers[marker].setAnimation(google.maps.Animation.DROP);
         kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
@@ -294,7 +296,7 @@ function ViewModel () {
         kcMap.markers[marker].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
       }
     }
-  }
+  };
   
   //makes 2 requests to the foursquare api
   getFoursquare = function (place) {
@@ -305,7 +307,7 @@ function ViewModel () {
     $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/photos?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
       success: function (response) {
         //if there are no available images
-        if (response.response.photos.items.length == 0) {
+        if (response.response.photos.items.length === 0) {
           $('.img-error').text('There are no available images for this venue.');
           for (var i=0; i<3; i++) {
             $('#img' + i).attr('src', '');
@@ -313,16 +315,16 @@ function ViewModel () {
         } else {
           //set image sources to new image urls
           $('.img-error').text('');
-          for (var i=0; i<3; i++) {
-            $('#img' + i).attr('src', response.response.photos.items[i].prefix + "200x200" + response.response.photos.items[i].suffix);
+          for (var x=0; x<3; x++) {
+            $('#img' + x).attr('src', response.response.photos.items[x].prefix + "200x200" + response.response.photos.items[x].suffix);
           }
         }
         //If there are images, show the image divs. If not, don't.
-        for (var i=0; i<3; i++) {
-          if ($('#img' + i).attr('src') == '') {
-            $('#img' + i).css('display', 'none');
+        for (var j=0; j<3; j++) {
+          if ($('#img' + j).attr('src') === '') {
+            $('#img' + j).css('display', 'none');
           } else {
-            $('#img' + i).css('display', 'block');
+            $('#img' + j).css('display', 'block');
           }
         }
       },
@@ -333,7 +335,7 @@ function ViewModel () {
           $('.image').css('height', '0');
         }
       }
-    })
+    });
 
     $.ajax({ url: 'https://api.foursquare.com/v2/venues/' + place.vid + '/tips?&client_id=IISH2ZQK5FLY3F4GM0P4SUQN4EXQV5ZENQMBSD1POZ0AABOO&client_secret=OKCZBXIZOLZI4E1M55VIOSD2CL3UH1YJAMDPEXWR1FFLXNDZ&v=20150305', 
       success: function (response) {
@@ -351,8 +353,8 @@ function ViewModel () {
           $('.tip-error').text('Error: The requested data is unavailable.');
         }
       }
-    })
-  }
+    });
+  };
 
   //instaniate Map when the page loads
   google.maps.event.addDomListener(window, 'load', kcMap = new Map());
